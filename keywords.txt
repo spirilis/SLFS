@@ -1,0 +1,50 @@
+#######################################
+# Syntax Coloring Map For SLFS
+#######################################
+
+#######################################
+# Library (KEYWORD3)
+#######################################
+
+SLFS	KEYWORD3
+
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+
+SerFlash	KEYWORD1
+
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
+
+begin	KEYWORD2
+end	KEYWORD2
+open	KEYWORD2
+close	KEYWORD2
+del	KEYWORD2
+lastError	KEYWORD2
+lastErrorString	KEYWORD2
+available	KEYWORD2
+peek	KEYWORD2
+read	KEYWORD2
+readBytes	KEYWORD2
+flush	KEYWORD2
+write	KEYWORD2
+
+
+#######################################
+# Constants (LITERAL1)
+#######################################
+
+FS_MODE_OPEN_READ	LITERAL1
+FS_MODE_OPEN_WRITE	LITERAL1
+FS_MODE_OPEN_CREATE	LITERAL1
+
+_FS_FILE_OPEN_FLAG_COMMIT	LITERAL1
+_FS_FILE_OPEN_FLAG_SECURE	LITERAL1
+_FS_FILE_OPEN_FLAG_NO_SIGNATURE_TEST	LITERAL1
+_FS_FILE_OPEN_FLAG_STATIC	LITERAL1
+_FS_FILE_OPEN_FLAG_VENDOR	LITERAL1
+_FS_FILE_PUBLIC_WRITE	LITERAL1
+_FS_FILE_PUBLIC_READ	LITERAL1

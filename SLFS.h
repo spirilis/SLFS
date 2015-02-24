@@ -20,6 +20,9 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
+#ifndef SLFS_H
+#define SLFS_H
+
 #include <Energia.h>
 #include <WiFi.h>
 
@@ -57,3 +60,5 @@ class SLFS : public Stream {
 };
 
 extern SLFS SerFlash;
+
+#endif /* SLFS_H */

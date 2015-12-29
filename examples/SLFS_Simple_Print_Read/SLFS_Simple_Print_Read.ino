@@ -1,26 +1,40 @@
+/* Energia SLFS example: SLFS Simple Print Read
+ *
+ * This example illustrates how to initialize the SerFlash object (representing a handle
+ * into the SimpleLink Serial Flash Filesystem) and use it to write contents to a file, then
+ * read it back.  This file will stick across multiple resets, power-cycles and even re-flashing
+ * of sketches or code.  The only way to delete the file is using the SerFlash.del() function
+ * call or using a CCS Uniflash utility to reformat or modify the SimpleLink Flash Filesystem.
+ */
+ 
 #include <SPI.h>
-#include <WiFiUdp.h>
 #include <WiFi.h>
-#include <WiFiClient.h>
 #include <SLFS.h>
-#include <WiFiServer.h>
 
 
 void setup()
 {
   // put your setup code here, to run once:
+  int retval;
+  
   Serial.begin(115200);
   delay(1000);
   Serial.println("CC3200/CC3100 SLFS Serial Flash demo.");
   
-  SerFlash.begin();
+  SerFlash.begin();  // This calls WiFi.init() in case the user hasn't already run WiFi.begin()
   
   Serial.println("Writing some text to /storage/mine.txt-");
   // Create a file "/storage/mine.txt"  
-  SerFlash.open("/storage/mine.txt",
+  retval = SerFlash.open("/storage/mine.txt",
     FS_MODE_OPEN_CREATE(512, _FS_FILE_OPEN_FLAG_COMMIT));
-  SerFlash.println("Hi there, this is my file!");
-  SerFlash.close();
+  if (retval == true) {
+    SerFlash.println("Hi there, this is my file!");
+    SerFlash.close();
+  } else {
+    Serial.print("Error opening /storage/mine.txt, error code: ");
+    Serial.println(SerFlash.lastErrorString());
+    suspend();  // Don't proceed any further!
+  }
 }
 
 void loop()

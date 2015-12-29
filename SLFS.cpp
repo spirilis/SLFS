@@ -157,8 +157,10 @@ int SLFS::read(void)
 	return (int)buf[0];
 }
 
-size_t SLFS::readBytes(char *buffer, size_t len)
+size_t SLFS::readBytes(void *buffer, size_t len)
 {
+	unsigned char *cbuf = (unsigned char *)buffer;
+
 	if (!filehandle)
 		return -1;
 	if (is_write)
@@ -167,7 +169,7 @@ size_t SLFS::readBytes(char *buffer, size_t len)
 	if (offset == filesize)
 		return 0;
 	
-	retval = sl_FsRead(filehandle, offset, (unsigned char *)buffer, len);
+	retval = sl_FsRead(filehandle, offset, cbuf, len);
 	if (retval < 0)
 		return 0;
 	offset += retval;

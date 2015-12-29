@@ -51,10 +51,11 @@ class SLFS : public Stream {
 		virtual int available(void);
 		virtual int peek(void);
 		virtual int read(void);
-		size_t readBytes(char *, size_t);
+		size_t readBytes(void *, size_t);
 		virtual void flush(void) { return; };
 		virtual size_t write(uint8_t c);
 		virtual size_t write(const uint8_t *, size_t);
+		virtual size_t write(const void *a, size_t b) { return write((const uint8_t *)a, b); };
 		operator bool();
 		using Print::write;
 };

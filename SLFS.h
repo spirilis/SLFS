@@ -133,8 +133,8 @@ class SLFS : public Stream {
         /// specified for deletion is the same as the file presently open (we don't track the filename),
         /// so we default to disallowing any use of the del() function while a file is presently open.
         /// @n @n
-        /// If necessary, you may declare another instance of the SLFS class in your code and use that
-        /// object to perform a del() against a different file.
+        /// If it is necessary to workaround this limitation, you may declare another instance of the
+        /// SLFS class in your code and use that object to perform a del() against a different file.
         int32_t del(const uint8_t *filename);
         inline int32_t del(const char *filename);
         /// @}

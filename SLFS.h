@@ -147,6 +147,9 @@ class SLFS : public Stream {
 
         ///
         /// @brief Return errno code of last API call
+        /// @details Returns current value of @c retval, a class-private variable representing the last
+        ///          error code or return value of a SimpleLink API syscall or SLFS bounds-checking or
+        ///          sanity-checking code.
         /// @returns Error code, typically <= 0 in value.
         int32_t lastError(void);
         ///
@@ -158,7 +161,7 @@ class SLFS : public Stream {
 
         ///
         /// @brief Error string description of last API call
-        /// @details Variant of getErrorString() which uses the class's built-in @c retval parameter which represents the return code
+        /// @details Variant of getErrorString() which uses the class's private @c retval variable which represents the return code
         ///          for the last executed SimpleLink API call or last SLFS API call.
         /// @note The value of @c retval usually matches the last SimpleLink API call, but may be assigned instead to an SLFS-native
         ///       errno code if the last error was caused by the SLFS's own bounds-checking and sanity-checking code. @n

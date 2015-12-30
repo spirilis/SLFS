@@ -55,12 +55,14 @@
 
 // Errno values intrinsic to this library (not the SimpleLink API)
 /** @defgroup slfs_errnos SLFS Library-native Error Codes
+ * @{
  */
 #define SLFS_LIB_ERR_FILE_NOT_OPEN         -10001  /**< File operation performed when SerFlash object has no file open */
 #define SLFS_LIB_ERR_FILE_OPEN_FOR_WRITE   -10002  /**< File operation requires read-mode but the SerFlash object has a file open for write */
 #define SLFS_LIB_ERR_FILE_OPEN_FOR_READ    -10003  /**< File operation requires write-mode but the SerFlash object has a file open for read */
 #define SLFS_LIB_ERR_FILE_ALREADY_OPEN     -10004  /**< File operation performed when SerFlash object has a file open */
 #define SLFS_LIB_ERR_OFFSET_OUT_OF_BOUNDS  -10005  /**< File position seek attempted to out-of-bounds position */
+/** @} */
 
 
 class SLFS : public Stream {

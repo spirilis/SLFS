@@ -115,27 +115,24 @@ class SLFS : public Stream {
         ///
 
         /// Further documentation about the open() options.
-        /// @defgroup open_opts SimpleLink Filesystem API open options
-        /// @{
-        /// @pargroup
-        /// @par Access modes
+        /// @page open_opts SimpleLink Filesystem API open options
+        /// @section open_opts SimpleLink Filesystem API open options
+        /// @subsection open_opts_accessmodes Access modes
         /// @li @c FS_MODE_OPEN_READ - Open file for reading
         /// @li @c FS_MODE_OPEN_WRITE - Open existing file for writing
         /// @li @c FS_MODE_OPEN_CREATE(size,opts) - Create a new file, destroying the old one if an existing file with identical filename existed.
-        /// @par FS_MODE_OPEN_CREATE parameters
+        /// @subsection open_opts_createparams FS_MODE_OPEN_CREATE options
         /// @li @c size - Maximum size of file, in bytes.  The SimpleLink Filesystem pre-allocates files ahead of time so it can reserve
         ///               as many 4KB blocks as needed.  If the _FS_FILE_OPEN_FLAG_COMMIT option is employed, it allocates 2 times the number
         ///               of blocks as would normally be required to contain the file.
-        /// @par @c opts is a bitwise OR of the following:
-        /// @li @c _FS_FILE_OPEN_FLAG_COMMIT - File is mirrored within the Serial Flash; this causes the file to use 2 times the amount of space.
-        /// @li @c _FS_FILE_OPEN_FLAG_SECURE - File is stored securely.  No documentation on what this means. @n
-        /// @li @c _FS_FILE_OPEN_FLAG_NO_SIGNATURE_TEST - Something related to Secure storage.  No documentation on what this means.
-        /// @li @c _FS_FILE_OPEN_FLAG_STATIC - Something related to Secure storage.  No documentation on what this means.
-        /// @li @c _FS_FILE_OPEN_FLAG_VENDOR - Something related to Secure storage.  No documentation on what this means.
-        /// @li @c _FS_FILE_PUBLIC_WRITE - Something related to Secure storage.  No documentation on what this means.
-        /// @li @c _FS_FILE_PUBLIC_READ - Something related to Secure storage.  No documentation on what this means.
-        /// @endpargroup
-        /// @}
+        /// @li @c opts - either 0 or a bitwise OR of the following:
+        /// @n @c _FS_FILE_OPEN_FLAG_COMMIT - File is mirrored within the Serial Flash; this causes the file to use 2 times the amount of space.
+        /// @n @c _FS_FILE_OPEN_FLAG_SECURE - File is stored securely.  No documentation on what this means.
+        /// @n @c _FS_FILE_OPEN_FLAG_NO_SIGNATURE_TEST - Something related to Secure storage.  No documentation on what this means.
+        /// @n @c _FS_FILE_OPEN_FLAG_STATIC - Something related to Secure storage.  No documentation on what this means.
+        /// @n @c _FS_FILE_OPEN_FLAG_VENDOR - Something related to Secure storage.  No documentation on what this means.
+        /// @n @c _FS_FILE_PUBLIC_WRITE - Something related to Secure storage.  No documentation on what this means.
+        /// @n @c _FS_FILE_PUBLIC_READ - Something related to Secure storage.  No documentation on what this means.
 
 
         ///
@@ -175,17 +172,84 @@ class SLFS : public Stream {
         /// @}
         ///
 
-        virtual int32_t seek(int32_t);
+        ///
+        /// @defgroup file_pos File position and filesize functions
+        /// @{
+
+        ///
+        /// @brief Set file position
+        /// @details Move file pointer to a specified position.  Boundaries include 0-to-filesize.
+        /// @param pos New file position.
+        /// @returns SL_FS_OK if @c pos is within boundaries, or SLFS_LIB_ERR_OFFSET_OUT_OF_BOUNDS if it's not.
+        virtual int32_t seek(int32_t pos);
+
+        ///
+        /// @brief File size
+        /// @details Return the file size as discovered with the SimpleLink API sl_FsGetInfo() call used by open().
+        /// @returns File size in bytes.
         virtual size_t size(void);
+
+        ///
+        /// @brief Available readable bytes
+        /// @returns true or false whether the file pointer has reached end-of-file.
         virtual int available(void);
+        /// @}
+        ///
+
+        ///
+        /// @defgroup io_func I/O functions
+        /// @{
+
+        ///
+        /// @brief Peek next byte
+        /// @details Read the byte at the current file pointer, but do not advance the pointer.
+        /// @returns A signed integer representing 8-bit unsigned value of this byte if successful, -1 if we're at the end of file,
+        ///          or a negative number (error code) less than -1 if the SimpleLink API returned an error.
         virtual int peek(void);
+
+        ///
+        /// @brief Read next byte
+        /// @details Read the byte at the current file pointer, advancing the pointer by 1.
+        /// @returns A signed integer representing 8-bit unsigned value of this byte if successful, -1 if we're at the end of file,
+        ///          or a negative number (error code) less than -1 if the SimpleLink API returned an error.
         virtual int read(void);
-        size_t readBytes(void *, size_t);
+
+        ///
+        /// @brief Read many bytes
+        /// @details Read more than 1 byte, up to @c maxlen bytes (but possibly fewer if fewer than @c maxlen bytes are available
+        ///          for reading)
+        /// @param buf Buffer for receiving data.  This buffer must be able to take up to @c maxlen bytes.
+        /// @param maxlen Maximum number of bytes to read
+        /// @returns Number of bytes actually read, or 0 if we're at the end-of-file or an error in the SimpleLink API occurred.
+        size_t readBytes(void *buf, size_t maxlen);
+
+        ///
+        /// @brief Not implemented
         virtual void flush(void);
+
+        ///
+        /// @brief Write single byte
+        /// @details Write one byte, returning the number of bytes actually written.
+        /// @param c Character to be written
+        /// @returns 1 if successful, 0 if error occurred.
         virtual size_t write(uint8_t c);
-        virtual size_t write(const uint8_t *, size_t);
+
+        ///
+        /// @brief Write multiple bytes
+        /// @details Write multiple bytes from buffer
+        /// @param buf Buffer containing data to be written
+        /// @param len Number of bytes within @c buf to write
+        /// @returns Actual number of bytes written, or 0 if error occurred.
+        virtual size_t write(const uint8_t *buf, size_t len);
         virtual size_t write(const void *a, size_t b);
+
+        ///
+        /// @brief Check if file open
+        /// @details This allows one to test the SLFS object itself to see if it represents an open file or not.
+        /// @returns true if a file is presently open, false if not.
         operator bool();
+        /// @}
+
         using Print::write;
 };
 

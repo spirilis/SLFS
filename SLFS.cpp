@@ -47,8 +47,10 @@ int SLFS::open(const uint8_t *filename, int32_t mode)
 {
 	SlFsFileInfo_t finfo;
 
-	if (filehandle)
+	if (filehandle) {
+		retval = -82;  // SLFS_LIB_ERR_FILE_ALREADY_OPEN
 		return false;
+	}
 
 	retval = sl_FsOpen((unsigned char*)filename, mode, NULL, &filehandle);
 	if (retval != SL_FS_OK)
@@ -85,8 +87,10 @@ int SLFS::open(const uint8_t *filename, int32_t mode)
 
 int SLFS::close(void)
 {
-	if (!filehandle)
+	if (!filehandle) {
+		retval = -79;  // SLFS_LIB_ERR_FILE_NOT_OPEN
 		return false;
+	}
 	
 	offset = 0;
 	filesize = 0;
@@ -97,6 +101,15 @@ int SLFS::close(void)
 	if (retval != SL_FS_OK)
 		return retval;
 	return true;
+}
+
+boolean SLFS::seek(int32_t pos)
+{
+	if (pos >= 0 && pos <= filesize) {
+		offset = pos;
+		return true;
+	}
+	return false;
 }
 
 int32_t SLFS::lastError(void)
@@ -111,10 +124,14 @@ const char * SLFS::lastErrorString(void)
 
 int SLFS::available(void)
 {
-	if (!filehandle)
+	if (!filehandle) {
+		retval = -79;  // SLFS_LIB_ERR_FILE_NOT_OPEN
 		return false;
-	if (is_write)
+	}
+	if (is_write) {
+		retval = -80;  // SLFS_LIB_ERR_FILE_OPEN_FOR_WRITE
 		return false;  // Makes no sense when open in "write" mode
+	}
 	if (offset < filesize)
 		return true;
 	return false;
@@ -124,8 +141,14 @@ int SLFS::peek(void)
 {
 	uint8_t buf[4];
 
-	if (!filehandle)
-		return -1;
+	if (!filehandle) {
+		retval = -79;  // SLFS_LIB_ERR_FILE_NOT_OPEN
+		return false;
+	}
+	if (is_write) {
+		retval = -80;  // SLFS_LIB_ERR_FILE_OPEN_FOR_WRITE
+		return false;
+	}
 	
 	if (offset == filesize)
 		return -1;
@@ -141,10 +164,14 @@ int SLFS::read(void)
 {
 	uint8_t buf[4];
 
-	if (!filehandle)
-		return -1;
-	if (is_write)
-		return -1;
+	if (!filehandle) {
+		retval = -79;  // SLFS_LIB_ERR_FILE_NOT_OPEN
+		return false;
+	}
+	if (is_write) {
+		retval = -80;  // SLFS_LIB_ERR_FILE_OPEN_FOR_WRITE
+		return false;
+	}
 	
 	if (offset == filesize)
 		return -1;
@@ -161,10 +188,14 @@ size_t SLFS::readBytes(void *buffer, size_t len)
 {
 	unsigned char *cbuf = (unsigned char *)buffer;
 
-	if (!filehandle)
-		return -1;
-	if (is_write)
-		return -1;
+	if (!filehandle) {
+		retval = -79;  // SLFS_LIB_ERR_FILE_NOT_OPEN
+		return false;
+	}
+	if (is_write) {
+		retval = -80;  // SLFS_LIB_ERR_FILE_OPEN_FOR_WRITE
+		return false;
+	}
 	
 	if (offset == filesize)
 		return 0;
@@ -178,12 +209,16 @@ size_t SLFS::readBytes(void *buffer, size_t len)
 
 size_t SLFS::write(uint8_t c)
 {
-	if (!filehandle)
-		return -1;
-	if (!is_write)
-		return -1;
+	if (!filehandle) {
+		retval = -79;  // SLFS_LIB_ERR_FILE_NOT_OPEN
+		return false;
+	}
+	if (!is_write) {
+		retval = -81;  // SLFS_LIB_ERR_FILE_OPEN_FOR_READ
+		return false;
+	}
 	
-	if (offset == filesize)
+	if (offset > filesize)
 		return 0;
 
 	retval = sl_FsWrite(filehandle, offset, &c, 1);
@@ -196,12 +231,16 @@ size_t SLFS::write(uint8_t c)
 
 size_t SLFS::write(const uint8_t *buffer, size_t len)
 {
-	if (!filehandle)
-		return -1;
-	if (!is_write)
-		return -1;
+	if (!filehandle) {
+		retval = -79;  // SLFS_LIB_ERR_FILE_NOT_OPEN
+		return false;
+	}
+	if (!is_write) {
+		retval = -81;  // SLFS_LIB_ERR_FILE_OPEN_FOR_READ
+		return false;
+	}
 	
-	if (offset == filesize)
+	if (offset > filesize)
 		return 0;
 
 	retval = sl_FsWrite(filehandle, offset, (unsigned char *)buffer, len);
@@ -306,6 +345,10 @@ const SLerrorCode simplelink_errorcode_fs[] = {
 	{"SL_FS_ERR_INVALID_MAGIC_NUM", -3},
 	{"SL_FS_ERR_FAILED_TO_READ", -2},
 	{"SL_FS_ERR_NOT_SUPPORTED", -1},
+	{"SLFS_LIB_ERR_FILE_NOT_OPEN", -79},
+	{"SLFS_LIB_ERR_FILE_OPEN_FOR_WRITE", -80},
+	{"SLFS_LIB_ERR_FILE_OPEN_FOR_READ", -81},
+	{"SLFS_LIB_ERR_FILE_ALREADY_OPEN", -82},
 	{NULL, 0}
 };
 

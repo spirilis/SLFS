@@ -1,3 +1,23 @@
+///
+/// @file		SLFS.h
+/// @brief		Header
+/// @details	SimpleLink File System
+/// * Supports the CC3100/CC3200 SimpleLink Serial Flash API
+/// * Tested on TI CC3200 LaunchPad
+///
+/// @author		Eric Brundick for the Energia project
+///
+/// @date		2014
+/// @version	101
+///
+/// @copyright	(C) 2014 Eric Brundick spirilis at linux dot com
+/// @n
+/// @note
+/// * Rei Vilo 2015-12-29 Added self-documentation
+/// @n Developed with [embedXcode+
+/// @see http://embedXcode.weebly.com
+///
+
 /* SimpleLink API - Filesystem
  * Supports the CC3100/CC3200 SimpleLink Serial Flash API
  * Tested on TI CC3200 LaunchPad
@@ -48,6 +68,8 @@ class SLFS : public Stream {
 		int32_t lastError(void);
 		const char *lastErrorString(void);
 
+		virtual boolean seek(int32_t);
+		virtual int32_t size(void) { return filesize; };
 		virtual int available(void);
 		virtual int peek(void);
 		virtual int read(void);

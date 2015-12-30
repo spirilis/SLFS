@@ -14,32 +14,21 @@
 /// @version    101
 ///
 /// @copyright    (C) 2014 Eric Brundick spirilis at linux dot com
-/// @n
-///  GNU Lesser General Public License
-/// @n
-///  This library is free software; you can redistribute it and/or
-/// @n
-///  modify it under the terms of the GNU Lesser General Public
-/// @n
-///  License as published by the Free Software Foundation; either
-/// @n
-///  version 2.1 of the License, or (at your option) any later version.
-/// @n
-/// @n
-///  This library is distributed in the hope that it will be useful,
-/// @n
-///  but WITHOUT ANY WARRANTY; without even the implied warranty of
-/// @n
-///  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-/// @n
-///  Lesser General Public License for more details.
-/// @n
-/// @n
-///  You should have received a copy of the GNU Lesser General Public
-/// @n
-///  License along with this library; if not, write to the Free Software
-/// @n
-///  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+///  @n GNU Lesser General Public License
+///  @n
+///  @n This library is free software; you can redistribute it and/or
+///  @n modify it under the terms of the GNU Lesser General Public
+///  @n License as published by the Free Software Foundation; either
+///  @n version 2.1 of the License, or (at your option) any later version.
+///  @n
+///  @n This library is distributed in the hope that it will be useful,
+///  @n but WITHOUT ANY WARRANTY; without even the implied warranty of
+///  @n MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+///  @n Lesser General Public License for more details.
+///  @n
+///  @n You should have received a copy of the GNU Lesser General Public
+///  @n License along with this library; if not, write to the Free Software
+///  @n Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 /// @note
 /// * Rei Vilo 2015-12-29 Added self-documentation
 /// @n Developed with [embedXcode+
@@ -95,26 +84,9 @@ class SLFS : public Stream {
         /// @param filename String representing a file. @n
         ///        While the SimpleLink Filesystem has no intrinsic concept of directories,
         ///        you may use slashes in your filename to organize files in a conceptual
-        ///        directory structure (and TI's system files utilize a UNIX-style forward-slash
-        ///        convention for their own files likewise).
-        /// @param mode SimpleLink API-native mode specifier.
-        ///        @parblock
-        ///        The following parameters are allowed for opening files:
-        ///        @par SimpleLink Filesystem API modes
-        ///        @c FS_MODE_OPEN_READ - Open file for reading  @n
-        ///        @c FS_MODE_OPEN_WRITE - Open existing file for writing @n
-        ///        @c FS_MODE_OPEN_CREATE(size,opts) - Create a new file, destroying the old one if an existing file with identical filename existed. @n
-        ///        @par FS_MODE_OPEN_CREATE parameters
-        ///        @c size - Maximum size of file, in bytes.  Note the SimpleLink Filesystem allocates using a minimal block size of 4KB. @n
-        ///        @c opts - A bitwise OR of the following attributes: @n
-        ///        @c _FS_FILE_OPEN_FLAG_COMMIT - File is mirrored within the Serial Flash; this causes the file to use 2 times the amount of space. @n
-        ///        @c _FS_FILE_OPEN_FLAG_SECURE - File is stored securely.  No documentation on what this means. @n
-        ///        @c _FS_FILE_OPEN_FLAG_NO_SIGNATURE_TEST - Something related to Secure storage.  No documentation on what this means. @n
-        ///        @c _FS_FILE_OPEN_FLAG_STATIC - Something related to Secure storage.  No documentation on what this means. @n
-        ///        @c _FS_FILE_OPEN_FLAG_VENDOR - Something related to Secure storage.  No documentation on what this means. @n
-        ///        @c _FS_FILE_PUBLIC_WRITE - Something related to Secure storage.  No documentation on what this means. @n
-        ///        @c _FS_FILE_PUBLIC_READ - Something related to Secure storage.  No documentation on what this means. @n
-        ///        @endparblock
+        ///        directory structure.
+        /// @param mode SimpleLink API-native mode specifier.  See @ref open_opts for full documentation
+        ///             on these parameters.
         /// @returns SL_FS_OK if successful, negative number if error
         int32_t open(const uint8_t *filename, int32_t mode);
 
@@ -135,11 +107,36 @@ class SLFS : public Stream {
         /// @n @n
         /// If it is necessary to work around this limitation, you may declare another instance of the
         /// SLFS class in your code and use that object to perform a del() against a different file.
+        /// @param filename String representing the file to delete
         /// @returns SL_FS_OK if successful, negative number if error
         int32_t del(const uint8_t *filename);
         inline int32_t del(const char *filename);
         /// @}
         ///
+
+        /// Further documentation about the open() options.
+        /// @defgroup open_opts SimpleLink Filesystem API open options
+        /// @{
+        /// @pargroup
+        /// @par Access modes
+        /// @li @c FS_MODE_OPEN_READ - Open file for reading
+        /// @li @c FS_MODE_OPEN_WRITE - Open existing file for writing
+        /// @li @c FS_MODE_OPEN_CREATE(size,opts) - Create a new file, destroying the old one if an existing file with identical filename existed.
+        /// @par FS_MODE_OPEN_CREATE parameters
+        /// @li @c size - Maximum size of file, in bytes.  The SimpleLink Filesystem pre-allocates files ahead of time so it can reserve
+        ///               as many 4KB blocks as needed.  If the _FS_FILE_OPEN_FLAG_COMMIT option is employed, it allocates 2 times the number
+        ///               of blocks as would normally be required to contain the file.
+        /// @par @c opts is a bitwise OR of the following:
+        /// @li @c _FS_FILE_OPEN_FLAG_COMMIT - File is mirrored within the Serial Flash; this causes the file to use 2 times the amount of space.
+        /// @li @c _FS_FILE_OPEN_FLAG_SECURE - File is stored securely.  No documentation on what this means. @n
+        /// @li @c _FS_FILE_OPEN_FLAG_NO_SIGNATURE_TEST - Something related to Secure storage.  No documentation on what this means.
+        /// @li @c _FS_FILE_OPEN_FLAG_STATIC - Something related to Secure storage.  No documentation on what this means.
+        /// @li @c _FS_FILE_OPEN_FLAG_VENDOR - Something related to Secure storage.  No documentation on what this means.
+        /// @li @c _FS_FILE_PUBLIC_WRITE - Something related to Secure storage.  No documentation on what this means.
+        /// @li @c _FS_FILE_PUBLIC_READ - Something related to Secure storage.  No documentation on what this means.
+        /// @endpargroup
+        /// @}
+
 
         ///
         /// @defgroup errors Error reporting

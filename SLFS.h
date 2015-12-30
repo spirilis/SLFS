@@ -166,7 +166,8 @@ class SLFS : public Stream {
         /// @note The value of @c retval usually matches the last SimpleLink API call, but may be assigned instead to an SLFS-native
         ///       errno code if the last error was caused by the SLFS's own bounds-checking and sanity-checking code. @n
         ///       For example, if the SLFS object had no open file and the user performed an open() on a new file, the @c retval
-        ///       variable would contain the return value of the sl_FsOpen() SimpleLink API syscall performed to open the file. @n
+        ///       variable would contain the return value of the sl_FsOpen() SimpleLink API syscall performed within the open()
+        ///       function to open the file. @n
         ///       But if the user was running del() on a file when the SLFS object had a file already open, the @c retval parameter would
         ///       not contain any return code derived from a SimpleLink API syscall such as sl_FsDel(), instead it would contain the value
         ///       SLFS_LIB_ERR_FILE_ALREADY_OPEN which was produced by the sanity-checking code within SLFS's del() function.

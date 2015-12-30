@@ -51,6 +51,7 @@
 #define SLFS_LIB_ERR_FILE_OPEN_FOR_WRITE   -10002
 #define SLFS_LIB_ERR_FILE_OPEN_FOR_READ    -10003
 #define SLFS_LIB_ERR_FILE_ALREADY_OPEN     -10004
+#define SLFS_LIB_ERR_OFFSET_OUT_OF_BOUNDS  -10005
 
 
 class SLFS : public Stream {
@@ -60,7 +61,6 @@ class SLFS : public Stream {
         int32_t retval;
         boolean is_write;
 
-        const char * getSlErrorCode(int32_t);
         
     public:
         SLFS();
@@ -73,9 +73,10 @@ class SLFS : public Stream {
         inline int32_t del(const char *filename);
 
         int32_t lastError(void);
+        const char *getErrorString(int32_t);
         const char *lastErrorString(void);
 
-        virtual boolean seek(int32_t);
+        virtual int32_t seek(int32_t);
         virtual size_t size(void);
         virtual int available(void);
         virtual int peek(void);

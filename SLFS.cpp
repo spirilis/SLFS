@@ -49,12 +49,12 @@ int32_t SLFS::open(const uint8_t *filename, int32_t mode)
 
     if (filehandle) {
         retval = SLFS_LIB_ERR_FILE_ALREADY_OPEN;
-        return false;
+        return retval;
     }
 
     retval = sl_FsOpen((unsigned char*)filename, mode, NULL, &filehandle);
     if (retval != SL_FS_OK)
-        return false;
+        return retval;
 
     offset = 0;
     filesize = 0;
@@ -66,7 +66,7 @@ int32_t SLFS::open(const uint8_t *filename, int32_t mode)
         if (retval != SL_FS_OK) {
             sl_FsClose(filehandle, NULL, NULL, 0);
             filehandle = 0;
-            return false;
+            return retval;
         }
         filesize = finfo.FileLen;
     } else {
@@ -77,12 +77,12 @@ int32_t SLFS::open(const uint8_t *filename, int32_t mode)
         if (retval != SL_FS_OK) {
             sl_FsClose(filehandle, NULL, NULL, 0);
             filehandle = 0;
-            return false;
+            return retval;
         }
         filesize = finfo.AllocatedLen;
     }
 
-    return true;
+    return retval
 }
 
 inline int32_t SLFS::open(const char *filename, int32_mode)
@@ -94,7 +94,7 @@ int32_t SLFS::close(void)
 {
     if (!filehandle) {
         retval = SLFS_LIB_ERR_FILE_NOT_OPEN;
-        return false;
+        return retval;
     }
     
     offset = 0;
@@ -103,18 +103,19 @@ int32_t SLFS::close(void)
     filehandle = 0;
     is_write = false;
 
-    if (retval != SL_FS_OK)
-        return retval;
-    return true;
+    return retval;
 }
 
-boolean SLFS::seek(int32_t pos)
+int32_t SLFS::seek(int32_t pos)
 {
+    retval = SL_FS_OK;
+
     if (pos >= 0 && pos <= filesize) {
         offset = pos;
-        return true;
+        return SL_FS_OK;
     }
-    return false;
+    retval = SLFS_LIB-ERR_OFFSET_OUT_OF_BOUNDS;
+    return retval;
 }
 
 size_t SLFS::size(void)
@@ -129,7 +130,7 @@ int32_t SLFS::lastError(void)
 
 const char * SLFS::lastErrorString(void)
 {
-    return getSlErrorCode(retval);
+    return getErrorString(retval);
 }
 
 int SLFS::available(void)
@@ -379,7 +380,7 @@ const SLerrorCode simplelink_errorcode_fs[] = {
     {NULL, 0}
 };
 
-const char * SLFS::getSlErrorCode(const int32_t code)
+const char * SLFS::getErrorString(const int32_t code)
 {
     SLerrorCode *cptr = NULL;
     int i=0;

@@ -115,7 +115,7 @@ class SLFS : public Stream {
         ///        @c _FS_FILE_PUBLIC_WRITE - Something related to Secure storage.  No documentation on what this means. @n
         ///        @c _FS_FILE_PUBLIC_READ - Something related to Secure storage.  No documentation on what this means. @n
         ///        @endparblock
-        ///
+        /// @returns SL_FS_OK if successful, negative number if error
         int32_t open(const uint8_t *filename, int32_t mode);
 
         ///
@@ -135,6 +135,7 @@ class SLFS : public Stream {
         /// @n @n
         /// If it is necessary to work around this limitation, you may declare another instance of the
         /// SLFS class in your code and use that object to perform a del() against a different file.
+        /// @returns SL_FS_OK if successful, negative number if error
         int32_t del(const uint8_t *filename);
         inline int32_t del(const char *filename);
         /// @}

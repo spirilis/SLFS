@@ -107,7 +107,7 @@ class SLFS : public Stream {
         ///        @par FS_MODE_OPEN_CREATE parameters
         ///        @c size - Maximum size of file, in bytes.  Note the SimpleLink Filesystem allocates using a minimal block size of 4KB. @n
         ///        @c opts - A bitwise OR of the following attributes: @n
-        ///        @c _FS_FILE_OPEN_FLAG_COMMIT - File is mirrored on Serial Flash; this causes the file to use 2X the amount of space. @n
+        ///        @c _FS_FILE_OPEN_FLAG_COMMIT - File is mirrored within the Serial Flash; this causes the file to use 2 times the amount of space. @n
         ///        @c _FS_FILE_OPEN_FLAG_SECURE - File is stored securely.  No documentation on what this means. @n
         ///        @c _FS_FILE_OPEN_FLAG_NO_SIGNATURE_TEST - Something related to Secure storage.  No documentation on what this means. @n
         ///        @c _FS_FILE_OPEN_FLAG_STATIC - Something related to Secure storage.  No documentation on what this means. @n

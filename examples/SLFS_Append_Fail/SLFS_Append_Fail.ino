@@ -24,7 +24,7 @@ void setup()
   // Create a file /binfile/myfile.bin
   int retval = SerFlash.open("/binfile/myfile.bin",
     FS_MODE_OPEN_CREATE(3072, _FS_FILE_OPEN_FLAG_COMMIT));
-  if (!retval) {
+  if (retval != SL_FS_OK) {
     Serial.print("Error creating file /binfile/myfile.bin, error code: ");
     Serial.println(SerFlash.lastErrorString());
     suspend();  // Don't go any further!
@@ -48,7 +48,7 @@ void loop()
 
   Serial.println("Opening /binfile/myfile.bin and listing all integers-");
   retval = SerFlash.open("/binfile/myfile.bin", FS_MODE_OPEN_READ);
-  if (!retval) {
+  if (retval != SL_FS_OK) {
     Serial.print("Error opening /binfile/myfile.bin for reading; error code: ");
     Serial.println(SerFlash.lastErrorString());
     suspend();
@@ -74,7 +74,7 @@ void loop()
   Serial.println(" to file /binfile/myfile.bin-");
   
   retval = SerFlash.open("/binfile/myfile.bin", FS_MODE_OPEN_WRITE);
-  if (!retval) {
+  if (retval != SL_FS_OK) {
     Serial.print("SerFlash.open: ");
     Serial.println(SerFlash.lastErrorString());
   }
@@ -82,12 +82,13 @@ void loop()
   // Upon open()'ing a file, the file pointer implicitly starts at position 0, we want to append to the end.
   SerFlash.seek(i * sizeof(uint32_t));
   retval = SerFlash.write(&my_int, sizeof(my_int));  // Rewrite index#0 with my_int
-  if (retval < 0) {
+  if (retval == 0) {  // SerFlash.write and SerFlash.read, SerFlash.readBytes all return > 0 for normal conditions,
+                      // and 0 if there is either an error or the length argument provided is 0.
     Serial.print("SerFlash.write: ");
     Serial.println(SerFlash.lastError());
   }
   retval = SerFlash.close();
-  if (!retval) {
+  if (retval != SL_FS_OK) {
     Serial.print("SerFlash.close: ");
     Serial.println(SerFlash.lastErrorString());
   }

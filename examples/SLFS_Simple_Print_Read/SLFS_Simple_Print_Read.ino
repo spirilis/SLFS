@@ -27,7 +27,7 @@ void setup()
   // Create a file "/storage/mine.txt"  
   retval = SerFlash.open("/storage/mine.txt",
     FS_MODE_OPEN_CREATE(512, _FS_FILE_OPEN_FLAG_COMMIT));
-  if (retval == true) {
+  if (retval == SL_FS_OK) {
     SerFlash.println("Hi there, this is my file!");
     SerFlash.close();
   } else {
@@ -43,6 +43,7 @@ void loop()
   SerFlash.open("/storage/mine.txt", FS_MODE_OPEN_READ);
   char buf[1024];
   
+  buf[0] = '\0';  // Init buf in case readBytes doesn't actually do anything (and returns 0)
   size_t read_length = SerFlash.readBytes(buf, 1023);
   Serial.print("Read ");
   Serial.print(read_length);

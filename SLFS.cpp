@@ -90,6 +90,12 @@ int32_t SLFS::open(const char *filename, int32_t mode)
     return open((const uint8_t *)filename, mode);
 }
 
+int32_t SLFS::open(String filename, int32_t mode)
+{
+    const char *cfn = filename.c_str();
+    return open((const uint8_t *)cfn, mode);
+}
+
 int32_t SLFS::close(void)
 {
     if (!filehandle) {
@@ -295,6 +301,12 @@ int32_t SLFS::del(const uint8_t *filename)
 int32_t SLFS::del(const char *filename)
 {
     return del((const uint8_t *)filename);
+}
+
+int32_t SLFS::del(String filename)
+{
+    const char *cfn = filename.c_str();
+    return del((const uint8_t *)cfn);
 }
 
 /* SimpleLink API error codes with string representations */

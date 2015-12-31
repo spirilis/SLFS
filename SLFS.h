@@ -90,6 +90,7 @@ class SLFS : public Stream {
         /// @returns SL_FS_OK if successful, negative number if error
         int32_t open(const uint8_t *filename, int32_t mode);
         int32_t open(const char *filename, int32_t mode);
+        int32_t open(String filename, int32_t mode);
 
         ///
         /// @brief Close file
@@ -112,6 +113,7 @@ class SLFS : public Stream {
         /// @returns SL_FS_OK if successful, negative number if error
         int32_t del(const uint8_t *filename);
         int32_t del(const char *filename);
+        int32_t del(String filename);
         /// @}
         ///
 

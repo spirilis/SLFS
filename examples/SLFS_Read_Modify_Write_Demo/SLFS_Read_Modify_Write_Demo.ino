@@ -31,6 +31,7 @@ void setup()
   if (retval != SL_FS_OK) {
     Serial.print("Error creating file /binfile/myfile.bin, error code: ");
     Serial.println(SerFlash.lastErrorString());
+    Serial.flush();  // flush pending serial output before entering suspend()
     suspend();  // Don't go any further!
   }
   
@@ -56,6 +57,7 @@ void loop()
   if (retval != SL_FS_OK) {
     Serial.print("Error opening /binfile/myfile.bin for reading, error code: ");
     Serial.println(SerFlash.lastErrorString());
+    Serial.flush();  // flush pending serial output before entering suspend()
     suspend();
   }
   
@@ -80,6 +82,7 @@ void loop()
   if (retval != SL_FS_OK) {
     Serial.print("Error opening /binfile/myfile.bin for reading, error code: ");
     Serial.println(SerFlash.lastErrorString());
+    Serial.flush();  // flush pending serial output before entering suspend()
     suspend();
   }
   
@@ -94,6 +97,7 @@ void loop()
     if (retval <= 0) {
       Serial.print("Error reading from /binfile/myfile.bin, error code: ");
       Serial.println(SerFlash.lastErrorString());
+      Serial.flush();  // flush pending serial output before entering suspend()
       suspend();
     }
   }
@@ -107,6 +111,7 @@ void loop()
   if (retval != SL_FS_OK) {
     Serial.print("Error creating file /binfile/myfile.bin, error code: ");
     Serial.println(SerFlash.lastErrorString());
+    Serial.flush();  // flush pending serial output before entering suspend()
     suspend();  // Don't go any further!
   }
 

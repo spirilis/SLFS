@@ -32,6 +32,7 @@ void setup()
   } else {
     Serial.print("Error opening /storage/mine.txt, error code: ");
     Serial.println(SerFlash.lastErrorString());
+    Serial.flush();  // flush pending serial output before entering suspend()
     suspend();  // Don't proceed any further!
   }
 }

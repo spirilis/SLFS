@@ -22,7 +22,7 @@ void setup()
   
   Serial.println("Creating a binary file with 32-bit integers binary packed:");
   // Create a file /binfile/myfile.bin
-  int retval = SerFlash.open("/binfile/myfile.bin",
+  int32_t retval = SerFlash.open("/binfile/myfile.bin",
     FS_MODE_OPEN_CREATE(128, _FS_FILE_OPEN_FLAG_COMMIT));
   if (retval != SL_FS_OK) {
     Serial.print("Error creating file /binfile/myfile.bin, error code: ");

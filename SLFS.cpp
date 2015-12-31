@@ -82,10 +82,10 @@ int32_t SLFS::open(const uint8_t *filename, int32_t mode)
         filesize = finfo.AllocatedLen;
     }
 
-    return retval
+    return retval;
 }
 
-inline int32_t SLFS::open(const char *filename, int32_mode)
+int32_t SLFS::open(const char *filename, int32_t mode)
 {
     return open((const uint8_t *)filename, mode);
 }
@@ -114,7 +114,7 @@ int32_t SLFS::seek(int32_t pos)
         offset = pos;
         return SL_FS_OK;
     }
-    retval = SLFS_LIB-ERR_OFFSET_OUT_OF_BOUNDS;
+    retval = SLFS_LIB_ERR_OFFSET_OUT_OF_BOUNDS;
     return retval;
 }
 
@@ -292,7 +292,7 @@ int32_t SLFS::del(const uint8_t *filename)
     return retval;
 }
 
-inline int32_t SLFS::del(const char *filename)
+int32_t SLFS::del(const char *filename)
 {
     return del((const uint8_t *)filename);
 }

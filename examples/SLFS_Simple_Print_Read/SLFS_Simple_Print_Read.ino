@@ -15,7 +15,6 @@
 void setup()
 {
   // put your setup code here, to run once:
-  int retval;
   
   Serial.begin(115200);
   delay(1000);
@@ -25,7 +24,7 @@ void setup()
   
   Serial.println("Writing some text to /storage/mine.txt-");
   // Create a file "/storage/mine.txt"  
-  retval = SerFlash.open("/storage/mine.txt",
+  int32_t retval = SerFlash.open("/storage/mine.txt",
     FS_MODE_OPEN_CREATE(512, _FS_FILE_OPEN_FLAG_COMMIT));
   if (retval == SL_FS_OK) {
     SerFlash.println("Hi there, this is my file!");
@@ -52,5 +51,5 @@ void loop()
   SerFlash.close();
   
   delay(10000);  // Pause 10 seconds
-  // ... then do it all again :-)
+  // ... then do it again :-)
 }

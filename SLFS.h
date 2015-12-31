@@ -89,6 +89,7 @@ class SLFS : public Stream {
         ///             on these parameters.
         /// @returns SL_FS_OK if successful, negative number if error
         int32_t open(const uint8_t *filename, int32_t mode);
+        int32_t open(const char *filename, int32_t mode);
 
         ///
         /// @brief Close file
@@ -110,7 +111,7 @@ class SLFS : public Stream {
         /// @param filename String representing the file to delete
         /// @returns SL_FS_OK if successful, negative number if error
         int32_t del(const uint8_t *filename);
-        inline int32_t del(const char *filename);
+        int32_t del(const char *filename);
         /// @}
         ///
 

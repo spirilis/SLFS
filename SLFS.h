@@ -3,17 +3,16 @@
 /// @brief        Header
 /// @headerfile <>
 /// @details    SimpleLink File System
-/// @n
-/// * Supports the CC3100/CC3200 SimpleLink Serial Flash API
-/// @n
-/// * Tested on TI CC3200 LaunchPad
+/// @n * Supports the CC3100/CC3200 SimpleLink Serial Flash API
+/// @n * Tested on TI CC3200 LaunchPad
+/// @n * Tested on TI MSP430F5529 LaunchPad with CC3100 BoosterPack
 ///
-/// @author        Eric Brundick for the Energia project
+/// @author     Eric Brundick for the Energia project
 ///
-/// @date        2014
+/// @date       2014
 /// @version    101
 ///
-/// @copyright    (C) 2014 Eric Brundick spirilis at linux dot com
+/// @copyright  (C) 2014 Eric Brundick spirilis at linux dot com
 ///  @n GNU Lesser General Public License
 ///  @n
 ///  @n This library is free software; you can redistribute it and/or

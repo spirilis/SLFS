@@ -4,6 +4,8 @@
  * deleting files.  In here, we delete all files that have been referenced by
  * the other demos that ship with this library, showing the return value and
  * error string.
+ *
+ * Complexity: low
  */
 #include <SPI.h>
 #include <WiFi.h>

@@ -1,10 +1,10 @@
-/* Energia SLFS example: SLFS Simple Print Read
+/* Energia SLFS example: SLFS String Test
  *
  * This example illustrates how to initialize the SerFlash object (representing a handle
- * into the SimpleLink Serial Flash Filesystem) and use it to write contents to a file, then
- * read it back.  This file will stick across multiple resets, power-cycles and even re-flashing
- * of sketches or code.  The only way to delete the file is using the SerFlash.del() function
- * call or using a CCS Uniflash utility to reformat or modify the SimpleLink Flash Filesystem.
+ * into the SimpleLink Serial Flash Filesystem) and use it to write contents to a file using
+ * the "String" datatype, then read it back as another String.  Illustrated in the loop() is the
+ * fact that when a user uses SerFlash.readBytes() to return a String, they must "free" an internal
+ * buffer using SerFlash.freeString() afterwards to avoid memory leaks.
  *
  * Complexity: low
  */
@@ -25,13 +25,20 @@ void setup()
   SerFlash.begin();  // This calls WiFi.init() in case the user hasn't already run WiFi.begin()
   
   Serial.println("Writing some text to /storage/mine.txt-");
+  
   // Create a file "/storage/mine.txt"  
   int32_t retval = SerFlash.open("/storage/mine.txt",
     FS_MODE_OPEN_CREATE(512, _FS_FILE_OPEN_FLAG_COMMIT));
   if (retval == SL_FS_OK) {
-    SerFlash.println("Hi there, this is my file!");
+    // Create our String object with our message
+    String s("Hi there, this is a String object.");
+    s += " ... with an appendage.";
+
+    // Write our String object to the file!    
+    SerFlash.write(s);
     SerFlash.close();
   } else {
+    // retval did not return SL_FS_OK, there must be an error!
     Serial.print("Error opening /storage/mine.txt, error code: ");
     Serial.println(SerFlash.lastErrorString());
     Serial.flush();  // flush pending serial output before entering suspend()
@@ -43,16 +50,18 @@ void loop()
 {
   // Open "/storage/mine.txt" and read its contents, print to serial monitor-
   SerFlash.open("/storage/mine.txt", FS_MODE_OPEN_READ);
-  char buf[1024];
   
-  buf[0] = '\0';  // Init buf in case readBytes doesn't actually do anything (and returns 0)
-  size_t read_length = SerFlash.readBytes(buf, 1023);
+  String s = SerFlash.readBytes();
   Serial.print("Read ");
-  Serial.print(read_length);
+  Serial.print(s.length());
   Serial.println(" bytes from /storage/mine.txt - contents:");
-  Serial.println(buf);
+  Serial.println(s);
   SerFlash.close();
+  SerFlash.freeString();  // Free up memory used by the last "String" produced by SerFlash.readBytes()
+  // ^ This is optional, if it's not used, the built-in buffer will stick around but if the user attempts
+  // to run SerFlash.readBytes() again, the old buffer will be free'd automatically before a new buffer is
+  // created.  So it's not strictly necessary but can help with tight memory footprints.
   
-  delay(10000);  // Pause 10 seconds
+  delay(2000);  // Pause 2 seconds
   // ... then do it again :-)
 }

@@ -60,6 +60,7 @@ class SLFS : public Stream {
         int32_t filesize, offset;
         int32_t retval;
         boolean is_write;
+        String *_readBytesInstance;
 
         
     public:
@@ -224,6 +225,13 @@ class SLFS : public Stream {
         /// @param maxlen Maximum number of bytes to read
         /// @returns Number of bytes actually read, or 0 if we're at the end-of-file or an error in the SimpleLink API occurred.
         size_t readBytes(void *buf, size_t maxlen);
+        String readBytes(size_t maxlen = 1024);
+
+        ///
+        /// @brief Free String object
+        /// @details When using the readBytes() variant which returns a String, a String object is allocated which may be ignored
+        ///          after it is returned to the user.  To avoid memory leaks, freeString() releases this String object and its buffer.
+        void freeString(void);
 
         ///
         /// @brief Not implemented
@@ -244,6 +252,7 @@ class SLFS : public Stream {
         /// @returns Actual number of bytes written, or 0 if error occurred.
         virtual size_t write(const uint8_t *buf, size_t len);
         virtual size_t write(const void *a, size_t b);
+        virtual size_t write(String s);
 
         ///
         /// @brief Check if file open

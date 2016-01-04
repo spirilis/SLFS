@@ -4,6 +4,8 @@
  * Appending to a file.  Technically you can write to a file that was already created,
  * and extend its size up to the max size specified during file creation, however every
  * time the file is opened for WRITE, the previous contents are erased!!
+ *
+ * Complexity: medium
  */
 
 #include <SPI.h>

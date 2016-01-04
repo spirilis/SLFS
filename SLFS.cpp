@@ -31,7 +31,7 @@ SLFS::SLFS(void)
     offset = 0;
     retval = SL_FS_OK;
     is_write = false;
-
+    _readBytesInstance = NULL;
 }
 
 void SLFS::begin(void)
@@ -224,6 +224,57 @@ size_t SLFS::readBytes(void *buffer, size_t len)
     return retval;
 }
 
+String SLFS::readBytes(size_t maxlen)
+{
+    char *sh = NULL;
+    size_t len;
+
+    if (!filehandle) {
+        retval = SLFS_LIB_ERR_FILE_NOT_OPEN;
+        return String("");
+    }
+    if (is_write) {
+        retval = SLFS_LIB_ERR_FILE_OPEN_FOR_WRITE;
+        return String("");
+    }
+    
+    if (offset == filesize)
+        return String("");
+
+    len = filesize-offset;
+    if (len > maxlen)
+        len = maxlen;
+
+    // Free up some memory before allocating our next buffer
+    if (_readBytesInstance != NULL) {
+        delete _readBytesInstance;  // Execute String's destructor, freeing the buffer in the process
+        _readBytesInstance = NULL;
+    }
+
+    // Allocate suitable buffer space to hold the file contents
+    sh = (char *) malloc(len+1);
+    sh[len] = '\0';
+    
+    retval = sl_FsRead(filehandle, offset, (uint8_t *)sh, len);
+    if (retval < 0) {
+        free(sh);
+        return String("");
+    }
+    offset += retval;
+
+    // Allocate a new String instance to hold the contents (which is strcpy'd by String's constructor)
+    _readBytesInstance = new String(sh);
+    free(sh);  // Creating a new String performs a strcpy, so 'sh' is no longer needed.
+    return *_readBytesInstance;  // Caller will usually assign this to another String object, triggering yet another strcpy.
+}
+
+void SLFS::freeString(void)
+{
+    if (_readBytesInstance != NULL)
+        delete _readBytesInstance;  // Execute String's destructor, freeing the buffer in the process
+    _readBytesInstance = NULL;
+}
+
 void SLFS::flush(void)
 {
     return;
@@ -276,6 +327,11 @@ size_t SLFS::write(const uint8_t *buffer, size_t len)
 size_t SLFS::write(const void *a, size_t b)
 {
     return write((const uint8_t *)a, b);
+}
+
+size_t SLFS::write(String s)
+{
+    return write((const uint8_t *)s.c_str(), s.length());
 }
 
 SLFS::operator bool()

@@ -9,6 +9,8 @@
  * for modifying a file would be to read-modify-write to a second file using a small RAM buffer,
  * then read-write the second file back to the first file.  That's cumbersome, and if you have
  * enough RAM to hold the file's contents, doing an in-memory Read-Modify-Write is simpler.
+ *
+ * Complexity: high
  */
 
 #include <SPI.h>

@@ -5,6 +5,8 @@
  * new contents.
  *
  * Here we only demonstrate that opening a previously-written file for "write" mode just doesn't work.
+ *
+ * Complexity: medium
  */
 
 #include <SPI.h>

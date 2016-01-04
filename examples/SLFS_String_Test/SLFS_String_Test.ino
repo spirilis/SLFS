@@ -3,8 +3,10 @@
  * This example illustrates how to initialize the SerFlash object (representing a handle
  * into the SimpleLink Serial Flash Filesystem) and use it to write contents to a file using
  * the "String" datatype, then read it back as another String.  Illustrated in the loop() is the
- * fact that when a user uses SerFlash.readBytes() to return a String, they must "free" an internal
- * buffer using SerFlash.freeString() afterwards to avoid memory leaks.
+ * fact that when a user uses SerFlash.readBytes() to return a String, they can optionally "free"
+ * the library's internal String buffer to reduce memory usage.  Strictly speaking, no memory
+ * leaks will occur if the user frequently utilizes SerFlash.readBytes() without running
+ * SerFlash.freeString() though.
  *
  * Complexity: low
  */

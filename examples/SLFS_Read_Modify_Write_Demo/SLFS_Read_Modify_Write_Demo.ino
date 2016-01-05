@@ -34,7 +34,7 @@ void setup()
     Serial.print("Error creating file /binfile/myfile.bin, error code: ");
     Serial.println(SerFlash.lastErrorString());
     Serial.flush();  // flush pending serial output before entering suspend()
-    suspend();  // Don't go any further!
+    while(1) ;  // halting (suspend() isn't support by Energia MT at the moment FYI)
   }
   
   uint32_t my_array[8];
@@ -60,7 +60,7 @@ void loop()
     Serial.print("Error opening /binfile/myfile.bin for reading, error code: ");
     Serial.println(SerFlash.lastErrorString());
     Serial.flush();  // flush pending serial output before entering suspend()
-    suspend();
+    while(1) ;  // halting (suspend() isn't support by Energia MT at the moment FYI)
   }
   
   size_t read_len = SerFlash.size();
@@ -85,7 +85,7 @@ void loop()
     Serial.print("Error opening /binfile/myfile.bin for reading, error code: ");
     Serial.println(SerFlash.lastErrorString());
     Serial.flush();  // flush pending serial output before entering suspend()
-    suspend();
+    while(1) ;  // halting (suspend() isn't support by Energia MT at the moment FYI)
   }
   
   read_len = SerFlash.size();
@@ -100,7 +100,7 @@ void loop()
       Serial.print("Error reading from /binfile/myfile.bin, error code: ");
       Serial.println(SerFlash.lastErrorString());
       Serial.flush();  // flush pending serial output before entering suspend()
-      suspend();
+      while(1) ;  // halting (suspend() isn't support by Energia MT at the moment FYI)
     }
   }
   SerFlash.close();
@@ -114,7 +114,7 @@ void loop()
     Serial.print("Error creating file /binfile/myfile.bin, error code: ");
     Serial.println(SerFlash.lastErrorString());
     Serial.flush();  // flush pending serial output before entering suspend()
-    suspend();  // Don't go any further!
+    while(1) ;  // halting (suspend() isn't support by Energia MT at the moment FYI)
   }
 
   // File created; write contents.

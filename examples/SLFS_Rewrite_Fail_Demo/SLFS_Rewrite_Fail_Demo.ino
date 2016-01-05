@@ -30,7 +30,7 @@ void setup()
     Serial.print("Error creating file /binfile/myfile.bin, error code: ");
     Serial.println(SerFlash.lastErrorString());
     Serial.flush();  // flush pending serial output before entering suspend()
-    suspend();  // Don't go any further!
+    while(1) ;  // halting (suspend() isn't support by Energia MT at the moment FYI)
   }
   
   uint32_t my_array[8];

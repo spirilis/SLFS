@@ -30,7 +30,7 @@ void setup()
   
   Serial.println("Halting; reset the MCU if you want to run this again.");
   Serial.flush();  // flush pending serial output before going into suspend()
-  suspend();
+  while(1) ;  // halting (suspend() isn't support by Energia MT at the moment FYI)
 }
 
 void loop()

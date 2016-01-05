@@ -35,7 +35,7 @@ void setup()
     Serial.print("Error opening /storage/mine.txt, error code: ");
     Serial.println(SerFlash.lastErrorString());
     Serial.flush();  // flush pending serial output before entering suspend()
-    suspend();  // Don't proceed any further!
+    while(1) ;  // halting (suspend() isn't support by Energia MT at the moment FYI)
   }
 }
 
